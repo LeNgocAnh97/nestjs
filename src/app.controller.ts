@@ -1,27 +1,52 @@
-import { Controller, Delete, Get, Param, Post, Put, Req, Res, UseFilters, UseInterceptors } from '@nestjs/common';
+import { Controller, Delete, Get, HttpService, Param, Post, Put, Req, Res, UseFilters, UseGuards, UseInterceptors } from '@nestjs/common';
 import { AppService } from './app.service';
 import { Request, response } from 'express';
 import { AllExceptionsFilter } from './exception.filter';
-import { LogInterceptor } from './log.interceptor';
+import { CacheDataInterceptor } from './log.interceptor';
 import { Observable } from 'rxjs';
+import { AuthenGuard } from './authen.guard';
 
 @Controller('*')
 export class AppController {
+
+
   constructor(
-    private readonly appService: AppService
+    private readonly appService: AppService,
+    private Http: HttpService
   ) {
   }
 
   @Get()
-  @UseInterceptors(LogInterceptor)
+  @UseGuards(AuthenGuard)
+  @UseInterceptors(CacheDataInterceptor)
   @UseFilters(new AllExceptionsFilter())
-  find(@Req() request: Request): any {
-    // console.log('aaa');
-    return {
-      data: [
+  async getDataGet(@Req() request: Request): Promise<any> {
+    if (!request) {
+      return;
+    }
+    try {
+      const requestGet = Object.assign({}, request);
+      return await this.appService.getDataFromMobio(requestGet);
+    }
+    catch (e) {
+      throw new Error('loi');
+    }
+  }
 
-      ],
-      code: 200
-    };
+  @Post()
+  @UseGuards(AuthenGuard)
+  @UseInterceptors(CacheDataInterceptor)
+  @UseFilters(new AllExceptionsFilter())
+  async getDataPost(@Req() request: Request): Promise<any> {
+    if (!request) {
+      return;
+    }
+    try {
+      const requestGet = Object.assign({}, request);
+      return await this.appService.postDataFromMobio(requestGet);
+    }
+    catch (e) {
+      throw new Error(e);
+    }
   }
 } 

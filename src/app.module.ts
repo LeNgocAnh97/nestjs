@@ -4,15 +4,24 @@ import { HttpModule, MiddlewareConsumer, Module, NestModule } from '@nestjs/comm
 import { AppController } from './app.controller';
 import { LoggerMiddleware } from './logger.middleware';
 import { AppService } from './app.service';
+import { HttpService } from '@nestjs/axios';
 
-
+HttpModule.registerAsync({
+  useFactory: () => ({
+    timeout: 5000,
+    maxRedirects: 5,
+  }),
+});
 @Module({
-  imports: [],
+  imports: [
+    HttpModule
+  ],
   controllers: [
-    AppController
+    AppController,
   ],
   providers: [
-    AppService],
+    AppService,
+  ],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
