@@ -29,7 +29,7 @@ export class AppController {
       return await this.appService.getDataFromMobio(requestGet);
     }
     catch (e) {
-      throw new Error('loi');
+      return e;
     }
   }
 

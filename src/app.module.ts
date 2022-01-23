@@ -1,3 +1,4 @@
+import { DynamicFieldController } from './dynamic-field.controller';
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionsFilter } from './exception.filter';
 import { HttpModule, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
@@ -17,7 +18,8 @@ HttpModule.registerAsync({
     HttpModule
   ],
   controllers: [
-    AppController,
+    DynamicFieldController,
+    AppController
   ],
   providers: [
     AppService,

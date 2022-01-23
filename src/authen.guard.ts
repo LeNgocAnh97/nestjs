@@ -7,7 +7,6 @@ export class AuthenGuard implements CanActivate {
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
     const request: Request = context.switchToHttp().getRequest();
-    console.log(request.headers['authorization']);
     if ((request && request.headers && request.headers['authorization']) || request.url.includes('adm')) {
       return true;
     }
