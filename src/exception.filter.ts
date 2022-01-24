@@ -17,9 +17,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
       exception instanceof HttpException
         ? exception.getStatus()
         : HttpStatus.INTERNAL_SERVER_ERROR;
-    const [space, module, api, version, other] = request.url.split('/');
-    delete request.params.FE_URL
-    const fileName = `${module}-${api}-${version}-${other.split('?')[0]}`;
 
     response.status(status).json({
       code: status,

@@ -19,10 +19,8 @@ export class CacheDataInterceptor implements NestInterceptor {
     const [space, module, api, version, other] = request.url.split('/');
     delete request.params.FE_URL
     const fileName = `${module}-${api}-${version}-${other.split('?')[0]}`;
-    console.log(fileName);
     if ((this.mode === 1 || this.mode === 2) && fs.existsSync(`./src/cache/${fileName}.json`)) {
       const data = fs.readFileSync(`./src/cache/${fileName}.json`, 'utf8')
-      console.log(data);
       if (data) {
         return of(JSON.parse(data));
       }
